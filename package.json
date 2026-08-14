@@ -1,0 +1,8 @@
+{
+  "name": "questory",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
