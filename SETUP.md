@@ -34,11 +34,11 @@
 **reference:** [Fastify OpenAPI TypeScript Generator](https://github.com/quinck-io/fastify-openapi-typescript-generator)
 1. Create `openapi.yaml` file in `packages/openapi` directory.
 2. Create `openapi-ts.config.ts` file in `apps/api/` directory.
-2. Install Dependencies:
+3. Install Dependencies:
    ```bash
    npm install @walecloud/fastify-openapi-typescript-generator --save-dev
    ```
-3. Generate Fastify server:
+4. Generate OpenAPI TypeScript types:
    ```bash
    npx fastify-openapi-typescript -i ../../packages/openapi/openapi.yaml -o ./src/generated/openapi
    ```
@@ -58,7 +58,7 @@
    ```bash
    npm install orval --save-dev
    ```
-4. Generate API client:
+4. Generate OpenAPI TypeScript client:
    ```bash
    npx orval --config ./orval.config.ts
    ```
