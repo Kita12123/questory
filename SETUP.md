@@ -22,3 +22,16 @@
    ```bash
    npx prisma generate
    ```
+
+## Orval setup
+**reference:** [Orval installation](https://orval.dev/docs/installation) and [Orval Quickstart](https://orval.dev/docs/quick-start)
+1. Create `openapi.yaml` file in `packages/openapi` directory.
+2. Create `orval.config.ts` file in `apps/web/` directory.
+3. Install Dependencies:
+   ```bash
+   npm install orval --save-dev
+   ```
+4. Generate API client:
+   ```bash
+   npx orval --config ./orval.config.ts
+   ```

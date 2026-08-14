@@ -1,0 +1,6 @@
+{
+    "name": "web",
+    "devDependencies": {
+        "orval": "^8.24.0"
+    }
+}
