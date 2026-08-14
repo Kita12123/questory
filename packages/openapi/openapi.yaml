@@ -11,6 +11,7 @@ servers:
     description: Local
 
 tags:
+  - name: Health
   - name: User
   - name: Dashboard
   - name: Groups
