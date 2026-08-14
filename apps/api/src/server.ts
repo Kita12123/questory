@@ -1,3 +1,4 @@
+import cors from "@fastify/cors";
 import Fastify from "fastify";
 import openapiGlue from "fastify-openapi-glue";
 
@@ -13,6 +14,9 @@ const app = Fastify({
 });
 
 const main = async () => {
+    await app.register(cors, {
+        origin: "*"
+    });
     await app.register(openapiGlue, {
         specification: "../../packages/openapi/openapi.yaml",
         serviceHandlers: handlers,

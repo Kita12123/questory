@@ -10,6 +10,16 @@ export default defineConfig({
             target: "src/generated/questory.ts",
             schemas: "src/generated/model",
             client: "react-query",
+
+            baseUrl: {
+                getBaseUrlFromSpecification: true,
+            },
+
+            override: {
+                fetch: {
+                    includeHttpResponseReturnType: false,
+                },
+            },
         },
     },
 });
