@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "@types/node": "^26.2.0",
+    "@walecloud/fastify-openapi-typescript-generator": "^1.5.0",
     "prisma": "^7.9.1"
   },
   "dependencies": {

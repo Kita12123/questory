@@ -1,5 +1,12 @@
 # SETUP
 
+# Project `api` setup
+1. Create `apps/api/` directory.
+   ```bash
+   mkdir apps/api
+   cd apps/api
+   ```
+
 ## Prisma setup
 **reference:** [Prisma ORM Quickstart](https://www.prisma.io/docs/prisma-postgres/quickstart/prisma-orm)
 1. Create `schema.prisma` file in `apps/api/prisma/` directory.
@@ -21,6 +28,26 @@
 6. Generate Prisma Client:
    ```bash
    npx prisma generate
+   ```
+
+## Fastify setup
+**reference:** [Fastify OpenAPI TypeScript Generator](https://github.com/quinck-io/fastify-openapi-typescript-generator)
+1. Create `openapi.yaml` file in `packages/openapi` directory.
+2. Create `openapi-ts.config.ts` file in `apps/api/` directory.
+2. Install Dependencies:
+   ```bash
+   npm install @walecloud/fastify-openapi-typescript-generator --save-dev
+   ```
+3. Generate Fastify server:
+   ```bash
+   npx fastify-openapi-typescript -i ../../packages/openapi/openapi.yaml -o ./src/generated/openapi
+   ```
+
+# Project `web` setup
+1. Create `apps/web/` directory.
+   ```bash
+   mkdir apps/web
+   cd apps/web
    ```
 
 ## Orval setup
