@@ -4,11 +4,22 @@
   "devDependencies": {
     "@types/node": "^26.2.0",
     "@walecloud/fastify-openapi-typescript-generator": "^1.5.0",
-    "prisma": "^7.9.1"
+    "prisma": "^7.9.1",
+    "tsx": "^4.19.0",
+    "typescript": "^5.x"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "fastify-openapi-glue": "^4.11.4"
+  },
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "generate": "npm run generate:openapi && npm run generate:prisma",
+    "generate:openapi": "fastify-openapi-typescript --input ../../packages/openapi/openapi.yaml --output ./src/generated/openapi",
+    "generate:prisma": "prisma generate"
   }
 }
