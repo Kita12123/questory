@@ -19,6 +19,20 @@ tags:
   - name: Exchange Rates
 
 paths:
+  /health:
+    get:
+      tags:
+        - Health
+      operationId: getHealth
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
   /api/v1/me:
     get:
       tags:
@@ -296,6 +310,18 @@ components:
         format: uuid
 
   schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - database
+      properties:
+        status:
+          type: string
+          example: "ok"
+        database:
+          type: string
+          example: "ok"
     User:
       type: object
       required:

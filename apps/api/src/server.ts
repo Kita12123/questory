@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import openapiGlue from "fastify-openapi-glue";
 
-import { handlers } from "./handlers/index.js";
+import { handlers } from "./handlers/index";
 
 const app = Fastify({
     logger: true,
