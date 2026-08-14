@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groups    Group[]
+}
+
+model Group {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: Cascade
+  )
+  items       Item[]
+
+  @@index([userId])
+}
+
+model Item {
+  id          String   @id @default(uuid()) @db.Uuid
+  groupId     String   @db.Uuid
+  name        String
+  description String?
+  url         String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  group       Group      @relation(
+    fields: [groupId],
+    references: [id],
+    onDelete: Cascade
+  )
+  plans       ItemPlan[]
+  purchase    Purchase?
+
+  @@index([groupId])
+}
+
+model ItemPlan {
+  id        String   @id @default(uuid()) @db.Uuid
+  itemId    String   @db.Uuid
+  priority  Int
+  amount    Decimal
+  currency  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  item      Item     @relation(
+    fields: [itemId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  @@unique([itemId, priority])
+  @@index([itemId])
+}
+
+model Purchase {
+  id          String   @id @default(uuid()) @db.Uuid
+  itemId      String   @unique @db.Uuid
+  amount      Decimal
+  currency    String
+  purchasedAt DateTime @default(now())
+  memo        String?
+  createdAt   DateTime @default(now())
+
+  item        Item     @relation(
+    fields: [itemId],
+    references: [id],
+    onDelete: Cascade
+  )
+}

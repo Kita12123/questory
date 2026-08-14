@@ -1,0 +1,621 @@
+openapi: 3.0.3
+
+info:
+  title: Questory API
+  version: 1.0.0
+  description: |
+    Questory REST API
+
+servers:
+  - url: http://localhost:3000
+    description: Local
+
+tags:
+  - name: User
+  - name: Dashboard
+  - name: Groups
+  - name: Items
+  - name: Purchase
+  - name: Exchange Rates
+
+paths:
+  /api/v1/me:
+    get:
+      tags:
+        - User
+      operationId: getMe
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /api/v1/dashboard:
+    get:
+      tags:
+        - Dashboard
+      operationId: getDashboard
+      summary: Get dashboard
+      responses:
+        "200":
+          description: Dashboard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+
+  /api/v1/groups:
+    get:
+      tags:
+        - Groups
+      operationId: getGroups
+      summary: Get groups
+      responses:
+        "200":
+          description: Groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GroupSummary"
+
+    post:
+      tags:
+        - Groups
+      operationId: createGroup
+      summary: Create group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGroupRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupSummary"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/groups/{groupId}:
+    get:
+      tags:
+        - Groups
+      operationId: getGroup
+      summary: Get group detail
+      parameters:
+        - $ref: "#/components/parameters/GroupId"
+      responses:
+        "200":
+          description: Group detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupDetail"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    put:
+      tags:
+        - Groups
+      operationId: updateGroup
+      summary: Update group
+      parameters:
+        - $ref: "#/components/parameters/GroupId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGroupRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupSummary"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+    delete:
+      tags:
+        - Groups
+      operationId: deleteGroup
+      summary: Delete group
+      parameters:
+        - $ref: "#/components/parameters/GroupId"
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/groups/{groupId}/items:
+    post:
+      tags:
+        - Items
+      operationId: createItem
+      summary: Create item
+      parameters:
+        - $ref: "#/components/parameters/GroupId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateItemRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/items/{itemId}:
+    get:
+      tags:
+        - Items
+      operationId: getItem
+      summary: Get item
+      parameters:
+        - $ref: "#/components/parameters/ItemId"
+      responses:
+        "200":
+          description: Item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    put:
+      tags:
+        - Items
+      operationId: updateItem
+      summary: Update item
+      parameters:
+        - $ref: "#/components/parameters/ItemId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateItemRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+    delete:
+      tags:
+        - Items
+      operationId: deleteItem
+      summary: Delete item
+      parameters:
+        - $ref: "#/components/parameters/ItemId"
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/items/{itemId}/purchase:
+    post:
+      tags:
+        - Purchase
+      operationId: purchaseItem
+      summary: Purchase item
+      parameters:
+        - $ref: "#/components/parameters/ItemId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePurchaseRequest"
+      responses:
+        "201":
+          description: Purchased
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Purchase"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          description: Item is already purchased
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+    delete:
+      tags:
+        - Purchase
+      operationId: cancelPurchase
+      summary: Cancel purchase
+      parameters:
+        - $ref: "#/components/parameters/ItemId"
+      responses:
+        "204":
+          description: Purchase cancelled
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/v1/exchange-rates:
+    get:
+      tags:
+        - Exchange Rates
+      operationId: getExchangeRates
+      summary: Get latest exchange rates
+      responses:
+        "200":
+          description: Latest exchange rates
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExchangeRates"
+
+components:
+  parameters:
+    GroupId:
+      name: groupId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+    ItemId:
+      name: itemId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+
+    GroupSummary:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+
+    GroupDetail:
+      type: object
+      required:
+        - id
+        - name
+        - progress
+        - priorities
+        - items
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        progress:
+          $ref: "#/components/schemas/Progress"
+        priorities:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items:
+            $ref: "#/components/schemas/PriorityBudget"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+
+    Item:
+      type: object
+      required:
+        - id
+        - name
+        - plans
+        - purchase
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        url:
+          type: string
+          format: uri
+          nullable: true
+        plans:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items:
+            $ref: "#/components/schemas/ItemPlan"
+        purchase:
+          allOf:
+            - $ref: "#/components/schemas/Purchase"
+          nullable: true
+
+    ItemPlan:
+      type: object
+      required:
+        - priority
+        - amount
+        - currency
+      properties:
+        priority:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+        amount:
+          type: number
+          minimum: 0
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: JPY
+
+    Purchase:
+      type: object
+      required:
+        - id
+        - amount
+        - currency
+        - purchasedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          minimum: 0
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: JPY
+        purchasedAt:
+          type: string
+          format: date-time
+        memo:
+          type: string
+          nullable: true
+
+    Progress:
+      type: object
+      required:
+        - purchasedItems
+        - totalItems
+        - percentage
+      properties:
+        purchasedItems:
+          type: integer
+          minimum: 0
+        totalItems:
+          type: integer
+          minimum: 0
+        percentage:
+          type: number
+          minimum: 0
+          maximum: 100
+
+    PriorityBudget:
+      type: object
+      required:
+        - priority
+        - remainingBudget
+        - currency
+      properties:
+        priority:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+        remainingBudget:
+          type: number
+          minimum: 0
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: JPY
+
+    Dashboard:
+      type: object
+      required:
+        - progress
+        - groups
+      properties:
+        progress:
+          $ref: "#/components/schemas/Progress"
+        groups:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+              - purchasedItems
+              - totalItems
+              - percentage
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+              purchasedItems:
+                type: integer
+                minimum: 0
+              totalItems:
+                type: integer
+                minimum: 0
+              percentage:
+                type: number
+                minimum: 0
+                maximum: 100
+
+    CreateGroupRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+
+    UpdateGroupRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+
+    CreateItemRequest:
+      type: object
+      required:
+        - name
+        - plans
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        url:
+          type: string
+          format: uri
+          nullable: true
+        plans:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items:
+            $ref: "#/components/schemas/ItemPlan"
+
+    UpdateItemRequest:
+      type: object
+      required:
+        - name
+        - plans
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        url:
+          type: string
+          format: uri
+          nullable: true
+        plans:
+          type: array
+          minItems: 3
+          maxItems: 3
+          items:
+            $ref: "#/components/schemas/ItemPlan"
+
+    CreatePurchaseRequest:
+      type: object
+      required:
+        - amount
+        - currency
+        - purchasedAt
+      properties:
+        amount:
+          type: number
+          minimum: 0
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: JPY
+        purchasedAt:
+          type: string
+          format: date-time
+        memo:
+          type: string
+          nullable: true
+
+    ExchangeRates:
+      type: object
+      required:
+        - base
+        - rates
+        - updatedAt
+      properties:
+        base:
+          type: string
+          example: JPY
+        rates:
+          type: object
+          additionalProperties:
+            type: number
+        updatedAt:
+          type: string
+          format: date-time
+
+  responses:
+    NotFound:
+      description: Resource not found
+
+    ValidationError:
+      description: Validation error
