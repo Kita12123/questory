@@ -7,7 +7,7 @@ export default defineConfig({
         },
         output: {
             mode: "tags-split",
-            target: "src/generated/questory.ts",
+            target: "src/generated/api.ts",
             schemas: "src/generated/model",
             client: "react-query",
 

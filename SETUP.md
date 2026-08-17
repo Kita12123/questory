@@ -44,10 +44,16 @@
    ```
 
 # Project `web` setup
-1. Create `apps/web/` directory.
+
+## shadcn/ui setup
+1. Initialize Project with shadcn/ui:
    ```bash
-   mkdir apps/web
-   cd apps/web
+   npx shadcn@latest init --preset b1aKNEsHA --base base --template vite --rtl --pointer
+   # What is your project named? ... web
+   ```
+2. Add shadcn/ui components:
+   ```bash
+   npx shadcn@latest add button card dialog input label
    ```
 
 ## Orval setup
