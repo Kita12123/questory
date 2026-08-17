@@ -46,6 +46,7 @@
 # Project `web` setup
 
 ## shadcn/ui setup
+**reference:** [shadcn/ui Installation](https://ui.shadcn.com/docs/installation/vite)
 1. Initialize Project with shadcn/ui:
    ```bash
    npx shadcn@latest init --preset b1aKNEsHA --base base --template vite --rtl --pointer
@@ -67,4 +68,12 @@
 4. Generate OpenAPI TypeScript client:
    ```bash
    npx orval --config ./orval.config.ts
+   ```
+
+## Puck setup
+**reference:** [Puck Get Started](https://puckeditor.com/docs/getting-started)
+1. Create `config.tsx` file in `apps/web/src/lib/puck/` directory.
+2. Install Dependencies:
+   ```bash
+   npm install @measured/puck --save-dev
    ```
