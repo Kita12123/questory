@@ -12,6 +12,7 @@ servers:
 
 tags:
   - name: Health
+  - name: Auth
   - name: User
   - name: Dashboard
   - name: Groups
@@ -33,6 +34,28 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthResponse"
+
+  /api/v1/login:
+    post:
+      tags:
+        - Auth
+      operationId: login
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
 
   /api/v1/me:
     get:
@@ -323,6 +346,25 @@ components:
         database:
           type: string
           example: "ok"
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+    LoginResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
     User:
       type: object
       required:
@@ -350,6 +392,12 @@ components:
           format: uuid
         name:
           type: string
+        purchasedAmount:
+          type: number
+          minimum: 0
+        totalAmount:
+          type: number
+          minimum: 0
 
     GroupDetail:
       type: object
@@ -641,6 +689,9 @@ components:
           format: date-time
 
   responses:
+    Unauthorized:
+      description: Unauthorized
+
     NotFound:
       description: Resource not found
 

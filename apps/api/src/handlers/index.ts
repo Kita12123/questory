@@ -3,11 +3,20 @@ import { ResolveFastifyRequestType } from "fastify/types/type-provider";
 import { IncomingMessage, ServerResponse } from "node:http";
 import type { Handlers } from "../generated/openapi/handlers";
 import { components } from "../generated/openapi/types";
+import { login } from "./auth";
 import { getHealth } from "./health";
 
 export const handlers: Handlers = {
     getHealth: function (this: FastifyInstance<RawServerDefault, IncomingMessage, ServerResponse<IncomingMessage>, FastifyBaseLogger, FastifyTypeProviderDefault>, request: FastifyRequest<{ Params: undefined; Querystring: undefined; Body: unknown; Reply: { status: string; database: string; }; Headers: undefined; }, RawServerDefault, IncomingMessage, FastifySchema, FastifyTypeProviderDefault, unknown, FastifyBaseLogger, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema, { Params: undefined; Querystring: undefined; Body: unknown; Reply: { status: string; database: string; }; Headers: undefined; }>>, reply: FastifyReply<{ Params: undefined; Querystring: undefined; Body: unknown; Reply: { status: string; database: string; }; Headers: undefined; }, RawServerDefault, IncomingMessage, ServerResponse<IncomingMessage>, unknown, FastifySchema, FastifyTypeProviderDefault, { status: string; database: string; }>): void | { status: string; database: string; } | Promise<void | { status: string; database: string; }> {
         return getHealth();
+    },
+    login: async function (this: FastifyInstance<RawServerDefault, IncomingMessage, ServerResponse<IncomingMessage>, FastifyBaseLogger, FastifyTypeProviderDefault>, request: FastifyRequest<{ Params: undefined; Querystring: undefined; Body: { email: string; password: string; }; Reply: unknown; Headers: undefined; }, RawServerDefault, IncomingMessage, FastifySchema, FastifyTypeProviderDefault, unknown, FastifyBaseLogger, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema, { Params: undefined; Querystring: undefined; Body: { email: string; password: string; }; Reply: unknown; Headers: undefined; }>>, reply: FastifyReply<{ Params: undefined; Querystring: undefined; Body: { email: string; password: string; }; Reply: unknown; Headers: undefined; }, RawServerDefault, IncomingMessage, ServerResponse<IncomingMessage>, unknown, FastifySchema, FastifyTypeProviderDefault, unknown>): Promise<unknown> {
+        const isSuccess = await login(request.body.email, request.body.password);
+        if (isSuccess) {
+            return reply.status(200).send({ message: "Login successful" });
+        } else {
+            return reply.status(401).send({ message: "Invalid email or password" });
+        }
     },
     getMe: function (this: FastifyInstance<RawServerDefault, IncomingMessage, ServerResponse<IncomingMessage>, FastifyBaseLogger, FastifyTypeProviderDefault>, request: FastifyRequest<{ Params: undefined; Querystring: undefined; Body: unknown; Reply: { id: string; name: string; email: string; }; Headers: undefined; }, RawServerDefault, IncomingMessage, FastifySchema, FastifyTypeProviderDefault, unknown, FastifyBaseLogger, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema, { Params: undefined; Querystring: undefined; Body: unknown; Reply: { id: string; name: string; email: string; }; Headers: undefined; }>>, reply: FastifyReply<{ Params: undefined; Querystring: undefined; Body: unknown; Reply: { id: string; name: string; email: string; }; Headers: undefined; }, RawServerDefault, IncomingMessage, ServerResponse<IncomingMessage>, unknown, FastifySchema, FastifyTypeProviderDefault, { id: string; name: string; email: string; }>): void | { id: string; name: string; email: string; } | Promise<void | { id: string; name: string; email: string; }> {
         throw new Error("Function not implemented.");
@@ -50,5 +59,5 @@ export const handlers: Handlers = {
     },
     getExchangeRates: function (this: FastifyInstance<RawServerDefault, IncomingMessage, ServerResponse<IncomingMessage>, FastifyBaseLogger, FastifyTypeProviderDefault>, request: FastifyRequest<{ Params: undefined; Querystring: undefined; Body: unknown; Reply: { base: string; rates: { [key: string]: number; }; updatedAt: string; }; Headers: undefined; }, RawServerDefault, IncomingMessage, FastifySchema, FastifyTypeProviderDefault, unknown, FastifyBaseLogger, ResolveFastifyRequestType<FastifyTypeProviderDefault, FastifySchema, { Params: undefined; Querystring: undefined; Body: unknown; Reply: { base: string; rates: { [key: string]: number; }; updatedAt: string; }; Headers: undefined; }>>, reply: FastifyReply<{ Params: undefined; Querystring: undefined; Body: unknown; Reply: { base: string; rates: { [key: string]: number; }; updatedAt: string; }; Headers: undefined; }, RawServerDefault, IncomingMessage, ServerResponse<IncomingMessage>, unknown, FastifySchema, FastifyTypeProviderDefault, { base: string; rates: { [key: string]: number; }; updatedAt: string; }>): void | { base: string; rates: { [key: string]: number; }; updatedAt: string; } | Promise<void | { base: string; rates: { [key: string]: number; }; updatedAt: string; }> {
         throw new Error("Function not implemented.");
-    }
+    },
 };
