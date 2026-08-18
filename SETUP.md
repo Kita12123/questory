@@ -54,7 +54,7 @@
    ```
 2. Add shadcn/ui components:
    ```bash
-   npx shadcn@latest add button card dialog input label
+   npx shadcn@latest add button card dialog input label progress
    ```
 
 ## Orval setup
@@ -64,6 +64,7 @@
 3. Install Dependencies:
    ```bash
    npm install orval --save-dev
+   npm install @tanstack/react-query
    ```
 4. Generate OpenAPI TypeScript client:
    ```bash
@@ -76,4 +77,5 @@
 2. Install Dependencies:
    ```bash
    npm install @measured/puck --save-dev
+   npm install react-router-dom
    ```
