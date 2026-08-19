@@ -54,7 +54,8 @@
    ```
 2. Add shadcn/ui components:
    ```bash
-   npx shadcn@latest add button card dialog input label progress
+   npx shadcn@latest add button card dialog input label progress tabs
+   npm install lucide-react
    ```
 
 ## Orval setup
