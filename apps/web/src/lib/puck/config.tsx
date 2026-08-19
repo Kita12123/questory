@@ -1,99 +1,70 @@
 import type { Config } from "@measured/puck";
+import { DropZone } from "@measured/puck";
+import { withLayoutConfig } from "./withLayoutConfig";
 
-import { LoginForm } from "../../components/auth/LoginForm";
-
-import {
-    GroupProgressList,
-} from "../../components/dashboard/GroupProgressList";
-import { OverallProgress } from "../../components/dashboard/OverallProgress";
-
-import {
-    GroupProgress,
-} from "../../components/group/GroupProgress";
-
-import {
-    ItemList,
-} from "../../components/item/ItemList";
-
-import {
-    ItemPurchase,
-} from "../../components/item/ItemPurchase";
-
-export const config: Config = {
+const rawConfig: Config = {
     components: {
-        LoginForm: {
-            fields: {},
-            render: () => <LoginForm />,
+
+        Card: {
+            fields: { title: { type: "text", label: "タイトル" } },
+            render: ({ title }) => (
+                <div style={{ padding: "16px", border: "1px solid #ddd" }}>
+                    <h3>{title || "カードタイトル"}</h3>
+                </div>
+            ),
         },
 
-        OverallProgress: {
+        Heading: {
+            fields: { text: { type: "text", label: "見出し" } },
+            render: ({ text }) => <h2>{text || "見出しテキスト"}</h2>,
+        },
+
+        // 【万能コンテナ Div】
+        Div: {
             fields: {
-                purchasedAmount: {
+                mode: {
+                    type: "radio",
+                    label: "レイアウトモード",
+                    options: [
+                        { label: "Flex (流動的)", value: "flex" },
+                        { label: "Grid (構造的)", value: "grid" },
+                    ],
+                },
+                gap: {
                     type: "number",
-                    label: "購入済み金額",
+                    label: "間隔 (px)",
+                    min: 0,
                 },
-                totalAmount: {
+                columns: {
                     type: "number",
-                    label: "合計金額",
+                    label: "Grid列数 (Gridモード時)",
+                    min: 1,
                 },
             },
-
-            render: () => (
-                <OverallProgress />
-            ),
-        },
-
-        GroupProgressList: {
-            fields: {},
-
-            render: () => (
-                <GroupProgressList />
-            ),
-        },
-
-        GroupProgress: {
-            fields: {
-                groupId: {
-                    type: "text",
-                    label: "Group ID",
-                },
+            defaultProps: {
+                mode: "flex",
+                gap: 16,
+                columns: 3,
             },
+            render: ({ mode, gap, columns }) => {
+                // モードに応じて DropZone の表示スタイルを切り替える
+                const style: React.CSSProperties =
+                    mode === "grid"
+                        ? {
+                            display: "grid",
+                            gridTemplateColumns: `repeat(${columns || 1}, 1fr)`,
+                            gap: `${gap}px`,
+                        }
+                        : {
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: `${gap}px`,
+                        };
 
-            render: ({ groupId }) => (
-                <GroupProgress
-                    groupId={groupId}
-                />
-            ),
-        },
-
-        ItemList: {
-            fields: {
-                groupId: {
-                    type: "text",
-                    label: "Group ID",
-                },
+                return <DropZone zone="div-content" style={style} />;
             },
-
-            render: ({ groupId }) => (
-                <ItemList
-                    groupId={groupId}
-                />
-            ),
-        },
-
-        ItemPurchase: {
-            fields: {
-                itemId: {
-                    type: "text",
-                    label: "Item ID",
-                },
-            },
-
-            render: ({ itemId }) => (
-                <ItemPurchase
-                    itemId={itemId}
-                />
-            ),
         },
     },
 };
+
+export const config = withLayoutConfig(rawConfig);
